@@ -1,0 +1,11 @@
+{
+  "name": "OpcosApp",
+  "version": "0.0.1",
+  "description": "to create simple API",
+  "author": "Chodanun Srinil",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mysql": "^2.12.0"
+  }
+}
