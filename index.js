@@ -12,24 +12,9 @@ app.get('/', function (req, res) {
 	res.send('<h1> Hello / </h1>');
 });
 
-app.get('/user', function (req, res) {
-	// res.send('<h1> Hello /index </h1>');
-	res.json(users.findAll());
-});
-
-app.get('/user/:id', function (req, res) {
-	var id = req.params.id;
-	res.json(users.findById(id));
-});
-
 app.post('/newuser', function (req, res) {
 	var json = req.body;
 	res.send('Add new ' + json.username + ' Completed')
-});
-
-app.post('/authen', function (req, res) {
-	var json = req.body;
-	res.send(json);
 });
  
 
@@ -40,17 +25,22 @@ app.get('/api/search/all', function(req, res){
 
 app.get('/api/search/byName/:name', function(req, res){
 	var name = req.params.name;
-	cosmetic.queryItems(name,function(err,result){
-		if (err){
-			console.log(err);
-		}
-		else{
-			console.log(result)
-			res.json(result);
-		}
-		
-	});
-	// res.json(cosmetic.searchByName(name));
+	if (name == "_all_"){
+		res.json(cosmetic.searchByName(name));
+	}
+	else{
+		cosmetic.queryItems(name,function(err,result){
+			if (err){
+				console.log(err);
+			}
+			else{
+				console.log(result)
+				res.json(result);
+			}
+			
+		});	
+	}
+
 });
 
 app.get('/api/search/byBarcode/:barcode', function(req, res){
