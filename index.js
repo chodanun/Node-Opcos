@@ -44,7 +44,22 @@ app.get('/api/search/byName/:name', function(req, res){
 		if (err){
 			console.log(err);
 		}
-		else if (result){
+		else{
+			console.log(result)
+			res.json(result);
+		}
+		
+	});
+	// res.json(cosmetic.searchByName(name));
+});
+
+app.get('/api/search/byBarcode/:barcode', function(req, res){
+	var barcode = req.params.barcode;
+	cosmetic.queryItemsBarcode(barcode,function(err,result){
+		if (err){
+			console.log(err);
+		}
+		else{
 			console.log(result)
 			res.json(result);
 		}

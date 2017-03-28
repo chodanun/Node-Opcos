@@ -116,6 +116,29 @@ exports.queryItems = function(name,callback){
 	  
 	  ;
 	})
-	connection.end()
-	
+	connection.end()	
+}
+
+exports.queryItemsBarcode = function(barcode,callback){
+	var mysql = require('mysql')
+	var connection = mysql.createConnection({
+	  host     : 'localhost',
+	  user     : 'root',
+	  password : '',
+	  database : 'cosmetics'
+	});
+
+	connection.connect()
+
+	connection.query("SELECT * FROM `barcode` WHERE barcode = ?",[barcode], function (err, result){
+	  if (err) {
+		callback(err,null);
+	  }
+	  else{
+	  	callback(null,result);
+	  }
+	  
+	  ;
+	})
+	connection.end()	
 }
