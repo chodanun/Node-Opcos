@@ -1,7 +1,8 @@
 var express = require('express');
 var bodyparser = require('body-parser');
+
 var users = require('./users');
-var cosmetics = require('./cosmetics');
+var cosmetic = require('./cosmetics');
  
 var app = express();
 app.use(bodyparser.urlencoded({extended: true}));
@@ -34,14 +35,23 @@ app.post('/authen', function (req, res) {
 
 // cosmetics
 app.get('/api/search/all', function(req, res){
-	res.json(cosmetics.searchAll());
+	res.json(cosmetic.searchAll());
 });
 
 app.get('/api/search/byName/:name', function(req, res){
 	var name = req.params.name;
-	res.json(cosmetics.searchByName(name));
+	cosmetic.queryItems(name,function(err,result){
+		if (err){
+			console.log(err);
+		}
+		else if (result){
+			console.log(result)
+			res.json(result);
+		}
+		
+	});
+	// res.json(cosmetic.searchByName(name));
 });
-
 
 //server
 var server = app.listen(8000, function() {

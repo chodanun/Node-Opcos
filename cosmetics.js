@@ -94,3 +94,28 @@ exports.searchByName = function(name) {
 		return [];	
 	}
 };
+
+exports.queryItems = function(name,callback){
+	var mysql = require('mysql')
+	var connection = mysql.createConnection({
+	  host     : 'localhost',
+	  user     : 'root',
+	  password : '',
+	  database : 'cosmetics'
+	});
+
+	connection.connect()
+
+	connection.query("SELECT brand FROM `barcode` WHERE barcode_id = 1", function (err, result){
+	  if (err) {
+		callback(err,null);
+	  }
+	  else{
+	  	callback(null,result[0].brand);
+	  }
+	  
+	  ;
+	})
+	connection.end()
+	
+}
