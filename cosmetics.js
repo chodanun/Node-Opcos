@@ -125,12 +125,12 @@ exports.queryItemsBarcode = function(barcode,callback){
 	  host     : 'localhost',
 	  user     : 'root',
 	  password : '',
-	  database : 'cosmetics'
+	  database : 'cosmetics',
 	});
 
 	connection.connect()
 
-	connection.query("SELECT * FROM `barcode` WHERE barcode = ?",[barcode], function (err, result){
+	connection.query("select items.item_id,items.name,items.description,items.img,items.brand,items_matching.point from (items inner join items_matching on items.item_id = items_matching.item_id) inner join barcode on barcode.id = items_matching.barcode_id where barcode.barcode = ? ORDER BY items_matching.point DESC",[barcode], function (err, result){
 	  if (err) {
 		callback(err,null);
 	  }
