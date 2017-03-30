@@ -58,6 +58,22 @@ app.get('/api/search/byBarcode/:barcode', function(req, res){
 	// res.json(cosmetic.searchByName(name));
 });
 
+app.get('/api/search/itemOpinion/:type/:id', function(req, res){
+	var item_type = req.params.type;
+	var item_id = req.params.id;
+	cosmetic.queryItemOpinion(item_type,item_id,function(err,result){
+		if (err){
+			console.log(err);
+		}
+		else{
+			console.log(result)
+			res.json(result);
+		}
+		
+	});
+	// res.json(cosmetic.searchByName(name));
+});
+
 //server
 var server = app.listen(8000, function() {
   console.log('Server listening on port ' + server.address().port);
