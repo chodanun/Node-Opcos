@@ -74,19 +74,23 @@ app.get('/api/search/itemOpinion/:type/:id', function(req, res){
 	});
 });
 
-app.get('/api/search/item-comments/:type/:id', function (req, res) {
+app.get('/api/search/item-comments/:item_id/:type/:feature/:kind', function (req, res) {
+	var item_id = req.params.item_id;
 	var item_type = req.params.type;
-	var item_id = req.params.id;
-	cosmetic.queryItemComments(item_type,item_id,function(err,result){
-		if (err){
-			console.log(err);
-		}
-		else{
-			console.log(result)
-			res.json(result);
-		}
+	var feature = req.params.feature;
+	var kind = req.params.kind
+	console.log(item_id,item_type,feature,kind)
+	res.send('<h1> Hello / </h1>');
+	// cosmetic.queryItemComments(item_id,item_type,feature,kind,function(err,result){
+	// 	if (err){
+	// 		console.log(err);
+	// 	}
+	// 	else{
+	// 		console.log(result)
+	// 		res.json(result);
+	// 	}
 		
-	});
+	// });
 });
 
 
