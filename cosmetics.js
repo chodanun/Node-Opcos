@@ -123,12 +123,24 @@ exports.queryItemOpinion = function(type,id,callback){
 	connection.end()	
 }
 
-exports.queryItemComments = function(item_type,item_id,callback){
+exports.queryItemComments = function(item_id,item_type,feature,kind,callback){
 	if (item_type == "lipstick"){
-		var query = "select * from comments inner join opinion_lip on comments.comment_id = opinion_lip.comment_id where comments.item_id = ?";
+		console.log("quet in lipstick")
+		if (kind == "positive"){
+			var query = "select * from comments inner join opinion_lip on comments.comment_id = opinion_lip.comment_id where comments.item_id = "+item_id+" and "+feature+" > 0";	
+		}else{
+			var query = "select * from comments inner join opinion_lip on comments.comment_id = opinion_lip.comment_id where comments.item_id = "+item_id+" and "+feature+" < 0";	
+		}
+		
 	}
 	else{
-		var query = "select * from comments inner join opinion_skin on comments.comment_id = opinion_skin.comment_id where comments.item_id = ?";
+		console.log("quet in skin-protection")
+		if (kind == "positive"){
+			var query = "select * from comments inner join opinion_skin on comments.comment_id = opinion_skin.comment_id where comments.item_id = "+item_id+" and "+feature+" > 0";	
+		}else{
+			var query = "select * from comments inner join opinion_skin on comments.comment_id = opinion_skin.comment_id where comments.item_id = "+item_id+" and "+feature+" < 0";	
+		}
+		
 	}
 	
 	var mysql = require('mysql')
@@ -140,8 +152,8 @@ exports.queryItemComments = function(item_type,item_id,callback){
 	});
 
 	connection.connect()
-
-	connection.query(query,[item_id], function (err, result){
+	console.log(query)
+	connection.query(query,[item_id,feature], function (err, result){
 	  if (err) {
 		callback(err,null);
 	  }
