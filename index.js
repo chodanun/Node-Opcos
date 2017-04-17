@@ -118,6 +118,19 @@ app.get('/api/logout/:token',function(req,res){
 	
 })
 
+app.get('/api/userdetails/:uid',function(req,res){
+	let uid = req.params.uid
+	users.getDetails(uid).then( (data)=>{
+		res.json(data)
+	})
+})
+
+app.get('/api/map/UidFbToUid/:uidfb',function (req,res){
+	let uid_fb = req.params.uidfb
+	users.mapUidFbToUid(uid_fb).then( (data)=>{
+		res.json(data[0])
+	})
+})
 
 //server
 var server = app.listen(8000, function() {

@@ -151,3 +151,45 @@ exports.logout = (token) =>{
 		})
 	})
 }
+
+exports.getDetails = (uid)=>{
+	return new Promise( (resolve,reject) =>{
+		var mysql = require('mysql')
+		var connection = mysql.createConnection({
+		  host     : 'localhost',
+		  user     : 'root',
+		  password : '',
+		  database : 'cosmetics',
+		})
+		connection.connect()
+		connection.query("select uid_fb,name,email,birthday,img from users where uid = ?",[uid], function (err, result){
+			  if (err) {
+				reject(err)
+			  }
+			  if (result){
+			  	resolve(result)
+			  }
+		})
+	})
+}
+
+exports.mapUidFbToUid = (uid_fb)=>{
+	return new Promise( (resolve,reject)=>{
+		var mysql = require('mysql')
+		var connection = mysql.createConnection({
+		  host     : 'localhost',
+		  user     : 'root',
+		  password : '',
+		  database : 'cosmetics',
+		})
+		connection.connect()
+		connection.query("select uid from users where uid_fb = ?",[uid_fb], function (err, result){
+			  if (err) {
+				reject(err)
+			  }
+			  if (result){
+			  	resolve(result)
+			  }
+		})
+	})
+}
