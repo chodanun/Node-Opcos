@@ -24,16 +24,6 @@ exports.findById = function(id) {
 };
 
 exports.auth = function(json,callback){
-	let uid_fb = json.id
-	let email = json.email
-	let name = json.name
-	let birthday = json.birthday
-	let img = json.picture.data.url
-	
-	birthday = birthday.split("/").reverse().join("-");
-	console.log(email,name,birthday,img)
-	// callback(null,{status_user:true})
-
 	var mysql = require('mysql')
 	var connection = mysql.createConnection({
 	  host     : 'localhost',
@@ -42,41 +32,71 @@ exports.auth = function(json,callback){
 	  database : 'cosmetics',
 	});
 
-	connection.connect()
+	selectUid(json,connection).then(function(data){
+		console.log(data)
+		return data
+	}).then( (d)=> console.log(d))
 
-	connection.query("insert into users (uid_fb,email,name,birthday,img) values (?,?,?,?,?)",[uid_fb,email,name,birthday,img], function (err, result){
-	  if (err) {
-		callback(err,null);
-	  }
-	  else{
-	  	callback(null,result);
-	  }
-	  
-	  ;
-	})
-	connection.end()
+	// connection.query("insert into users (uid_fb,email,name,birthday,img) values (?,?,?,?,?)",[uid_fb,email,name,birthday,img], function (err, result){
+	// 	callback(err,null);
+	// 	callback(null,result);
+	// 	if ()
+	//   	connection.query("select uid from users where uid_fb = ?",[uid_fb], function (err2,result2){
+	//   		console.log(result2)
+	//   		console.log(err2)
+	//   		callback(null,result2)
+	//   		console.log(result2)
+	//   		if (result2){
+	//   			console.log(result2)
+	//   			callback(null,result2)
+	//   		}
+	//   	})
+	// })
+	
 }
 
-// exports.queryItemsBarcode = function(barcode,callback){
-// 	var mysql = require('mysql')
-// 	var connection = mysql.createConnection({
-// 	  host     : 'localhost',
-// 	  user     : 'root',
-// 	  password : '',
-// 	  database : 'cosmetics',
-// 	});
-
-// 	connection.connect()
-
-// 	connection.query("select items.type,items.item_id,items.name,items.description,items.img,items.brand,items_matching.point, score,reviews  from ((items inner join items_matching on items.item_id = items_matching.item_id) inner join barcode on barcode.id = items_matching.barcode_id) inner join opinion_score_calculation on items.item_id = opinion_score_calculation.item_id where barcode.barcode = ? ORDER BY items_matching.point DESC",[barcode], function (err, result){
-// 	  if (err) {
-// 		callback(err,null);
-// 	  }
-// 	  else{
-// 	  	callback(null,result);
-// 	  }
-	  
-// 	  ;
-// 	})
-// 	connection.end()	
-// }
+selectUid = function(json,connection){
+	return new Promise( function(resolve, reject){
+		let uid_fb = json.id
+		connection.connect()
+		connection.query("select uid from users where uid_fb = ?",[uid_fb], function (err,result){
+			if (err){
+				reject(err)
+			}
+			if(result){
+				if (result.length != 0){
+					// already had an account
+					var uid = result[0].uid
+					resolve(uid)
+				}else{
+					let name = json.name
+					let email = json.email
+					let birthday = json.birthday
+					let img = json.picture.data.url
+					birthday = birthday.split("/").reverse().join("-");
+					// connection.connect()
+					connection.query("insert into users (uid_fb,email,name,birthday,img) values (?,?,?,?,?)",[uid_fb,email,name,birthday,img], function (err2, result2){
+						if (err2){
+							console.log(err2)
+						}
+						if (result2){
+							// console.log(result2)
+							connection.query("select uid from users where uid_fb = ?",[uid_fb], function (err,result){
+								if (err){
+									reject(err)
+								}
+								if(result){
+									if (result.length != 0){
+										// already had an account
+										var uid = result[0].uid
+										resolve(uid)
+									}
+								}
+							})
+						}
+					})
+	  			}	
+			}
+	  	})
+	})	
+}

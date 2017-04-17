@@ -97,14 +97,11 @@ app.post('/api/newuser', function (req, res) {
 			res.json({
 				status_user:true,
 				is_new_user: false,
+				token:'',
 			});
 		}
 		else{
-			console.log(result)
-			res.json({
-				status_user:true,
-				is_new_user:true,
-			});
+			res.json(result);
 		}
 	})
 	// res.json({status_loading:true})
