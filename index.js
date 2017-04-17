@@ -93,18 +93,12 @@ app.post('/api/newuser', function (req, res) {
 	var json = req.body;
 	users.auth(json,function(err,result){
 		if (err){
-			console.log("err unique key --> already had an account");
-			res.json({
-				status_user:true,
-				is_new_user: false,
-				token:'',
-			});
+			console.log(err)
 		}
-		else{
+		if (result){
 			res.json(result);
 		}
 	})
-	// res.json({status_loading:true})
 });
 
 

@@ -1,3 +1,6 @@
+
+const crypto = require('crypto')
+
 var users = [
 	{
 		"id": 1,
@@ -32,27 +35,19 @@ exports.auth = function(json,callback){
 	  database : 'cosmetics',
 	});
 
-	selectUid(json,connection).then(function(data){
-		console.log(data)
-		return data
-	}).then( (d)=> console.log(d))
+	selectUid(json,connection).then((uid) =>{
+		crypto.randomBytes(20, (err, buffer) =>{
+		  let token = buffer.toString('hex')
+		  let isLogin = true
+		  // console.log(uid,token,isLogin)
+		  insertLogin({uid,token,isLogin},connection).then( (data)=>{
+		  	console.log(data)
+		  	callback(null,data)
+		  })
 
-	// connection.query("insert into users (uid_fb,email,name,birthday,img) values (?,?,?,?,?)",[uid_fb,email,name,birthday,img], function (err, result){
-	// 	callback(err,null);
-	// 	callback(null,result);
-	// 	if ()
-	//   	connection.query("select uid from users where uid_fb = ?",[uid_fb], function (err2,result2){
-	//   		console.log(result2)
-	//   		console.log(err2)
-	//   		callback(null,result2)
-	//   		console.log(result2)
-	//   		if (result2){
-	//   			console.log(result2)
-	//   			callback(null,result2)
-	//   		}
-	//   	})
-	// })
-	
+		})
+	})
+
 }
 
 selectUid = function(json,connection){
@@ -99,4 +94,18 @@ selectUid = function(json,connection){
 			}
 	  	})
 	})	
+}
+
+insertLogin = function(json,connection){
+	return new Promise( (resolve,reject) =>{
+		let token = json.token
+		let isLogin = json.isLogin
+		let uid = json.uid
+		connection.query('insert into token (token,isLogin,uid) values (?,?,?)',[token,isLogin,uid], function (err, result){
+			if(result){
+				resolve({token,uid})
+			}
+		})	
+	})
+	
 }
