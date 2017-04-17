@@ -106,6 +106,48 @@ insertLogin = function(json,connection){
 				resolve({token,uid})
 			}
 		})	
+	})	
+}
+
+exports.checkToken = (token) => {
+	return new Promise ( (resolve, reject)=>{
+		var mysql = require('mysql')
+		var connection = mysql.createConnection({
+		  host     : 'localhost',
+		  user     : 'root',
+		  password : '',
+		  database : 'cosmetics',
+		})
+		connection.connect()
+		connection.query("select isLogin,token,uid from token where token = ?",[token], function (err, result){
+			  if (err) {
+				reject(err)
+			  }
+			  else{
+			  	resolve(result)
+			  }
+		})
 	})
-	
+	connection.end()
+}
+
+exports.logout = (token) =>{
+	return new Promise ( (resolve, reject)=>{
+		var mysql = require('mysql')
+		var connection = mysql.createConnection({
+		  host     : 'localhost',
+		  user     : 'root',
+		  password : '',
+		  database : 'cosmetics',
+		})
+		connection.connect()
+		connection.query("update token set isLogin = 0 where token = ?",[token], function (err, result){
+			  if (err) {
+				reject(err)
+			  }
+			  if (result){
+			  	resolve({is_logout:true})
+			  }
+		})
+	})
 }

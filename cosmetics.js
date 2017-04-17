@@ -159,7 +159,6 @@ exports.queryItemComments = function(item_id,item_type,feature,kind,callback){
 	  	callback(null,result);
 	  }
 	  
-	  ;
 	})
 	connection.end()	
 	

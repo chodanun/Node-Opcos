@@ -90,7 +90,7 @@ app.get('/api/search/item-comments/:item_id/:type/:feature/:kind', function (req
 
 //users
 app.post('/api/newuser', function (req, res) {
-	var json = req.body;
+	let json = req.body;
 	users.auth(json,function(err,result){
 		if (err){
 			console.log(err)
@@ -100,6 +100,23 @@ app.post('/api/newuser', function (req, res) {
 		}
 	})
 });
+
+app.get('/api/checkToken/:token',function(req, res){
+	let token = req.params.token
+	// console.log(token)
+	users.checkToken(token).then((data) =>{
+		console.log(data)
+		res.json(data)
+	})
+})
+
+app.get('/api/logout/:token',function(req,res){
+	let token = req.params.token
+	users.logout(token).then( (data)=> {
+		res.json(data)	
+	})
+	
+})
 
 
 //server
