@@ -2,6 +2,7 @@ var express = require('express');
 var bodyparser = require('body-parser');
 var cors = require('cors')
 var users = require('./users');
+var logs = require('./logs');
 var cosmetic = require('./cosmetics');
 var app = express();
 
@@ -131,6 +132,16 @@ app.get('/api/map/UidFbToUid/:uidfb',function (req,res){
 		res.json(data[0])
 	})
 })
+
+// logs
+app.get('/api/log/stores/:uid/:item_id',function(req,res){
+	let uid = req.params.uid
+	let item_id = req.params.item_id
+	logs.stores(uid,item_id).then( (data)=>{
+		res.json(data)
+	})
+})
+
 
 //server
 var server = app.listen(8000, function() {
