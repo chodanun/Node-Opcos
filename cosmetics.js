@@ -77,7 +77,7 @@ exports.queryItemsBarcode = function(barcode,callback){
 
 	connection.connect()
 
-	connection.query("select items.type,items.item_id,items.name,items.description,items.img,items.brand,items_matching.point from (items inner join items_matching on items.item_id = items_matching.item_id) inner join barcode on barcode.id = items_matching.barcode_id where barcode.barcode = ? ORDER BY items_matching.point DESC",[barcode], function (err, result){
+	connection.query("select items.type,items.item_id,items.name,items.description,items.img,items.brand,items_matching.point, score,reviews  from ((items inner join items_matching on items.item_id = items_matching.item_id) inner join barcode on barcode.id = items_matching.barcode_id) inner join opinion_score_calculation on items.item_id = opinion_score_calculation.item_id where barcode.barcode = ? ORDER BY items_matching.point DESC",[barcode], function (err, result){
 	  if (err) {
 		callback(err,null);
 	  }

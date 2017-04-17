@@ -13,11 +13,6 @@ app.use(bodyparser.json());
 app.get('/', function (req, res) {
 	res.send('<h1> Hello / </h1>');
 });
-
-app.post('/newuser', function (req, res) {
-	var json = req.body;
-	res.send('Add new ' + json.username + ' Completed')
-});
  
 
 // cosmetics
@@ -57,7 +52,6 @@ app.get('/api/search/byBarcode/:barcode', function(req, res){
 		}
 		
 	});
-	// res.json(cosmetic.searchByName(name));
 });
 
 app.get('/api/search/itemOpinion/:type/:id', function(req, res){
@@ -93,6 +87,28 @@ app.get('/api/search/item-comments/:item_id/:type/:feature/:kind', function (req
 	});
 });
 
+
+//users
+app.post('/api/newuser', function (req, res) {
+	var json = req.body;
+	users.auth(json,function(err,result){
+		if (err){
+			console.log("err unique key --> already had an account");
+			res.json({
+				status_user:true,
+				is_new_user: false,
+			});
+		}
+		else{
+			console.log(result)
+			res.json({
+				status_user:true,
+				is_new_user:true,
+			});
+		}
+	})
+	// res.json({status_loading:true})
+});
 
 
 //server
