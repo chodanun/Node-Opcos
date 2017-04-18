@@ -142,6 +142,13 @@ app.get('/api/log/stores/:uid/:item_id',function(req,res){
 	})
 })
 
+app.get('/api/log/fetches/:uid',function(req,res){
+	let uid = req.params.uid
+	logs.fetches(uid).then( (data)=>{
+		res.json(data)
+	})	
+})
+
 
 //server
 var server = app.listen(8000, function() {
