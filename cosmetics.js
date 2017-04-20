@@ -6,26 +6,28 @@ exports.searchByName = function(name) {
 	return [];		
 };
 
-exports.queryItems = function(name,callback){
-	var mysql = require('mysql')
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'root',
-	  password : '',
-	  database : 'cosmetics'
-	});
+exports.queryItems = function(obj){
+	return new Promise ( (resolve,reject)=>{
+		let name = obj.name
+		var mysql = require('mysql')
+		var connection = mysql.createConnection({
+		  host     : 'localhost',
+		  user     : 'root',
+		  password : '',
+		  database : 'cosmetics'
+		});
 
-	connection.connect()
-
-	connection.query("SELECT brand FROM `barcode` WHERE barcode_id = 1", function (err, result){
-	  if (err) {
-		callback(err,null);
-	  }
-	  else{
-	  	callback(null,result[0].brand);
-	  }
+		connection.connect()
+		connection.query("SELECT * FROM items WHERE name = ?",[name], function (err, result){
+		  if (err) {
+			reject(err)
+		  }
+		  if (result){
+		  	resolve(result)
+		  }
+		})
+		connection.end()	
 	})
-	connection.end()	
 }
 
 exports.queryItemsBarcode = function(barcode,callback){

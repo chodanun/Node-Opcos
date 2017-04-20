@@ -21,23 +21,12 @@ app.get('/api/search/all', function(req, res){
 	res.json(cosmetic.searchAll());
 });
 
-app.get('/api/search/byName/:name', function(req, res){
-	var name = req.params.name;
-	if (name == "_all_"){
-		res.json(cosmetic.searchByName(name));
-	}
-	else{
-		cosmetic.queryItems(name,function(err,result){
-			if (err){
-				console.log(err);
-			}
-			else{
-				console.log(result)
-				res.json(result);
-			}
-			
-		});	
-	}
+app.post('/api/search/byName/', function(req, res){
+	let json = req.body
+	console.log(json)
+	cosmetic.queryItems(json).then( data=>{
+		res.json(data)
+	}).catch( err=> res.send(err))
 
 });
 
