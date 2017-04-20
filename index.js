@@ -88,6 +88,15 @@ app.get('/api/search/item-comments/:item_id/:type/:feature/:kind', function (req
 	});
 });
 
+app.get('/api/search/info_barcode/:barcode', function (req, res) {
+	let barcode = req.params.barcode;
+	// console.log(barcode)
+	cosmetic.queryItemDetails(barcode).then( (data)=>{
+		res.json(data)
+	}).catch(err=>{
+		res.json(err)
+	})
+});
 
 //users
 app.post('/api/newuser', function (req, res) {

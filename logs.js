@@ -23,7 +23,6 @@ exports.stores = (uid,item_id)=>{
 
 exports.fetches = (uid)=>{
 	return new Promise ( (resolve, reject)=>{
-		console.log(uid)
 		var mysql = require('mysql')
 		var connection = mysql.createConnection({
 		  host     : 'localhost',
@@ -32,36 +31,18 @@ exports.fetches = (uid)=>{
 		  database : 'cosmetics',
 		})
 		connection.connect()
-		connection.query("select id,item_id,time_stamp from item_logs where uid = ?",[uid], function (err, result){
+		connection.query("select item_logs.id,item_logs.item_id,item_logs.time_stamp, items.name from item_logs inner join items on  items.item_id = item_logs.item_id where uid = ? order by item_logs.time_stamp DESC",[uid], function (err, result){
 			  if (err) {
 				reject(err)
 			  }
 			  else{
-			  	resolve(result)
+			  	if (result.length > 10){
+			  		resolve(result.slice(0, 10))	
+			  	}else{
+			  		resolve(result)	
+			  	}
 			  }
 		})
 		connection.end()
 	})
 }
-
-// exports.checkToken = (token) => {
-// 	return new Promise ( (resolve, reject)=>{
-// 		var mysql = require('mysql')
-// 		var connection = mysql.createConnection({
-// 		  host     : 'localhost',
-// 		  user     : 'root',
-// 		  password : '',
-// 		  database : 'cosmetics',
-// 		})
-// 		connection.connect()
-// 		connection.query("select isLogin,token,uid from token where token = ?",[token], function (err, result){
-// 			  if (err) {
-// 				reject(err)
-// 			  }
-// 			  else{
-// 			  	resolve(result)
-// 			  }
-// 		})
-// 	})
-// 	connection.end()
-// }

@@ -1,47 +1,9 @@
-var cosmetics = [
-  {
-    "id": 1,
-    "tittle": "รายงานสำหรับผู้บริหารยุทธศาสตร์วิจัยด้านการพัฒนาเศรษฐกิจจากฐานความหลากหลายทางชีวภาพของประเทศไทยปี 2559-2563",
-    "author": "นภาวรรณ นพรัตนราภรณ์ และคณะนักวิจัย, กรุงเทพฯ : สำนักงานคณะกรรมการวิจัยแห่งชาติ, 2559",
-    "image": "http://lib.ku.ac.th/web/images/stories/news_book/Poenkeo/01-2017/research%20strategy%20on%20biodiversity-base.png"
-  },
-  {
-    "id": 2,
-    "tittle": "พระราชพงศาวดารกรุงรัตนโกสินทร์ รัชกาลที่ 5",
-    "author": "สมเด็จฯ กรมพระยาดำรงราชานุภาพ, กรุงเทพฯ : ไทยควอลิตี้บุ๊คส์ (2006), 2559",
-    "image": "http://lib.ku.ac.th/web/images/stories/news_book/Poenkeo/01-2017/king%20rama5%20antecedence.png"
-  },
-  {
-    "id": 3,
-    "tittle": "สแกนกิน",
-    "author": "เขียน : ทิม สเป็กเตอร์ ; แปล : ธิดากานต์ รุจิพัฒนกุล, กรุงเทพฯ : อมรินทร์เฮลท์, 2559",
-    "image": "http://lib.ku.ac.th/web/images/stories/news_book/Poenkeo/01-2017/diet%20myth.png"
-  },
-  {
-    "id": 4,
-    "tittle": "The secret of volume by price",
-    "author": "จุติ เสนางคนิกร, กรุงเทพฯ : ซุปเปอร์เทรดเดอร์ พับลิชชิ่ง จำกัด, 2559",
-    "image": "http://lib.ku.ac.th/web/images/stories/news_book/Poenkeo/01-2017/CB%20trader.png"
-  },
-  {
-    "id": 5,
-    "tittle": "แบรนด์ที่ใช่ ขายอะไรก็มีคนซื้อ",
-    "author": "ดลชัย บุณยะรัตเวช เขียน ; อรณัญช์ สุขเกษม วาดภาพประกอบ, กรุงเทพฯ : อมรินทร์ฮาวทู, 2559",
-    "image": "http://lib.ku.ac.th/web/images/stories/news_book/Poenkeo/01-2017/brand%20engine.png"
-  }
-]
-
 exports.searchAll = function() {
-	return cosmetics;
+	return [];
 };
 
 exports.searchByName = function(name) {
-	if (name == "_all_"){
-		return cosmetics;
-	}
-	else{
-		return [];	
-	}
+	return [];		
 };
 
 exports.queryItems = function(name,callback){
@@ -163,3 +125,29 @@ exports.queryItemComments = function(item_id,item_type,feature,kind,callback){
 	connection.end()	
 	
 }
+
+exports.queryItemDetails = function(barcode){
+	return new Promise( (resolve,reject)=>{
+		var mysql = require('mysql')
+		var connection = mysql.createConnection({
+		  host     : 'localhost',
+		  user     : 'root',
+		  password : '',
+		  database : 'cosmetics',
+		});
+
+		connection.connect()
+		connection.query("select * from barcode where barcode = ?",[barcode], function (err, result){
+		  if(result){
+		  	resolve(result[0])
+		  }
+		  if(err){
+		  	reject(err)
+		  }
+		  
+		})
+		connection.end()
+	})
+}
+
+
