@@ -1,10 +1,4 @@
-exports.searchAll = function() {
-	return [];
-};
-
-exports.searchByName = function(name) {
-	return [];		
-};
+var stringSimilarity = require('string-similarity');
 
 exports.queryItems = function(obj){
 	return new Promise ( (resolve,reject)=>{
@@ -23,6 +17,7 @@ exports.queryItems = function(obj){
 			reject(err)
 		  }
 		  if (result){
+		  	let sim = stringSimilarity.compareTwoStrings('healed', 'sealed');
 		  	resolve(result)
 		  }
 		})
