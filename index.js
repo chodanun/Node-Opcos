@@ -30,9 +30,10 @@ app.post('/api/search/byName/', function(req, res){
 
 });
 
-app.get('/api/search/byBarcode/:barcode', function(req, res){
-	var barcode = req.params.barcode;
-	cosmetic.queryItemsBarcode(barcode,function(err,result){
+app.post('/api/search/byBarcode/', function(req, res){
+	console.log("BARCODE")
+	var json = req.body
+	cosmetic.queryItemsBarcode(json.barcode,function(err,result){
 		if (err){
 			console.log(err);
 		}
