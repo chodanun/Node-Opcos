@@ -1,4 +1,25 @@
 // var stringSimilarity = require('string-similarity');
+exports.queryAllItems = function(){
+	return new Promise ( (resolve,reject)=>{
+		var mysql = require('mysql')
+		var connection = mysql.createConnection({
+		  host     : 'localhost',
+		  user     : 'root',
+		  password : '',
+		  database : 'cosmetics'
+		});
+		connection.connect()
+		connection.query("SELECT * FROM items WHERE 1", function (err, result){
+		  if (err) {
+			reject(err)
+		  }
+		  if (result){
+		  	resolve(result)
+		  }
+		})
+		connection.end()	
+	})
+}
 
 exports.queryItems = function(obj){
 	return new Promise ( (resolve,reject)=>{
@@ -9,10 +30,14 @@ exports.queryItems = function(obj){
 		  user     : 'root',
 		  password : '',
 		  database : 'cosmetics'
+		  // host     : '122.155.167.69',
+		  // user     : 'easyregnco_root',
+		  // password : 'Root1234',
+		  // database : 'easyregnco_cosmetic'
 		});
 
 		connection.connect()
-		connection.query("SELECT * FROM items WHERE name = ?",[name], function (err, result){
+		connection.query("SELECT items.item_id, items.brand, items.name, items.description, items.img, items.type, score, reviews FROM items inner join opinion_score_calculation on items.item_id = opinion_score_calculation.item_id WHERE name = ?",[name], function (err, result){
 		  if (err) {
 			reject(err)
 		  }

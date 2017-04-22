@@ -17,8 +17,13 @@ app.get('/', function (req, res) {
  
 
 // cosmetics
-app.get('/api/search/all', function(req, res){
-	res.json(cosmetic.searchAll());
+app.get('/api/search/all/', function(req, res){
+	// console.log("IN")
+	cosmetic.queryAllItems().then( data=>{
+		// data = data.splice(0,10)
+		res.json(data)
+	}).catch( err=> res.send(err))
+
 });
 
 app.post('/api/search/byName/', function(req, res){
