@@ -30,10 +30,6 @@ exports.queryItems = function(obj){
 		  user     : 'root',
 		  password : '',
 		  database : 'cosmetics'
-		  // host     : '122.155.167.69',
-		  // user     : 'easyregnco_root',
-		  // password : 'Root1234',
-		  // database : 'easyregnco_cosmetic'
 		});
 
 		connection.connect()
