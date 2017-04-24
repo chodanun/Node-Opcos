@@ -31,7 +31,7 @@ exports.fetches = (uid)=>{
 		  database : 'cosmetics',
 		})
 		connection.connect()
-		connection.query("select item_logs.id,item_logs.item_id,item_logs.time_stamp, items.name from item_logs inner join items on  items.item_id = item_logs.item_id where uid = ? order by item_logs.time_stamp DESC",[uid], function (err, result){
+		connection.query("select opinion_score_calculation.score,item_logs.id,items.type,items.brand,item_logs.item_id,item_logs.time_stamp, items.name from (item_logs inner join items on  items.item_id = item_logs.item_id) inner join opinion_score_calculation on opinion_score_calculation.item_id = items.item_id where uid = ? order by item_logs.time_stamp DESC",[uid], function (err, result){
 			  if (err) {
 				reject(err)
 			  }

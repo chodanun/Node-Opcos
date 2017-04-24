@@ -4,6 +4,7 @@ var cors = require('cors')
 var users = require('./users');
 var logs = require('./logs');
 var cosmetic = require('./cosmetics');
+var recommended = require('./recommended');
 var app = express();
 
 app.use(cors())
@@ -14,7 +15,6 @@ app.use(bodyparser.json());
 app.get('/', function (req, res) {
 	res.send('<h1> Hello / </h1>');
 });
- 
 
 // cosmetics
 app.get('/api/search/all/', function(req, res){
@@ -153,6 +153,14 @@ app.get('/api/log/fetches/:uid',function(req,res){
 	})	
 })
 
+// recommended system
+app.get('/api/recommendedItems/:uid',function(req, res){
+	let uid = req.params.uid
+	recommended.loadRecItems(uid).then( (items)=>{
+		res.json(items)
+	})
+	
+})
 
 //server
 var server = app.listen(8000, function() {
