@@ -156,10 +156,12 @@ app.get('/api/log/fetches/:uid',function(req,res){
 // recommended system
 app.get('/api/recommendedItems/:uid',function(req, res){
 	let uid = req.params.uid
-	recommended.loadRecItems(uid).then( (items)=>{
-		res.json(items)
+	recommended.loadItemsPairs(uid)
+	.then( (pairs)=>{
+		recommended.loadRecItems(pairs).then ( (data)=>{
+			res.send(data)
+		})
 	})
-	
 })
 
 //server
