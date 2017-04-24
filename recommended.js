@@ -22,14 +22,14 @@ exports.loadItemsPairs = function(uid,distinctPairs=5){
 	})
 }
 
-exports.loadRecItems = function(pairs,numPerPairs=10){
+exports.loadRecItems = function(pairs,numPerPairs=5){
 	return new Promise ( (resolve, reject) =>{
 		var arr_sql = []
 		pairs.map( (item)=> {
 			let q = `( select * from items inner join opinion_score_calculation on items.item_id=opinion_score_calculation.item_id where (items.type="${item.type}" and items.brand="${item.brand}") order by score desc limit ${numPerPairs})`
 			arr_sql.push(q)
 		})
-		
+
 		var sql = arr_sql.join(" union ")
 		var mysql = require('mysql')
 		var connection = mysql.createConnection({
